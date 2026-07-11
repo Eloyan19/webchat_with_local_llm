@@ -1,0 +1,11 @@
+backend/.env
+.env
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+backend/.venv/
+
+# реальный прод-конфиг фронта с gate-токеном — не в git
+frontend/.env.production
