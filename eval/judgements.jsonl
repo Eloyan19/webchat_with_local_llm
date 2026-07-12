@@ -1,0 +1,73 @@
+{"key": "cloud|0|1|0", "grounded": true, "reason": "Цитата [1] содержит код с комментарием, указывающим на добавление в начало списка, что подтверждает ответ ассистента."}
+{"key": "cloud|0|2|0", "grounded": true, "reason": "Цитата [1] подтверждает, что конструктор принимает параметры channelName (String), channelMembers (Int) и initialMessages (List<Message>), что полностью соответствует ответу."}
+{"key": "cloud|0|3|0", "grounded": true, "reason": "Ответ полностью соответствует цитатам: перечислены те же три теста с теми же описаниями."}
+{"key": "cloud|0|4|0", "grounded": false, "reason": "В ответе указано свойство `errorMessages`, но в цитате оно называется `errorMessages` (во множественном числе) и имеет тип `List<ErrorMessage>`. Однако ответ не уточняет, что свойство является списком, а не одним сообщением. Кроме того, названия `isLoading` и `searchInput` совпадают, но ответ должен был указать три свойства именно из цитаты. Формально противоречий нет, но ответ неполностью точен, так как не указан тип `List<ErrorMessage>`."}
+{"key": "cloud|0|5|0", "grounded": false, "reason": "Цитаты не содержат информации о том, что upPress() используется для навигации назад, и не указывают, что класс JetsnackNavController помечен аннотацией @Composable; в цитате [1] аннотация @Composable применена к функции rememberJetsnackNavController, а не к классу."}
+{"key": "cloud|0|6|0", "grounded": true, "reason": "Цитата [1] подтверждает, что SnackbarManager объявлен как object и использует _messages: MutableStateFlow и messages: StateFlow, что соответствует ответу."}
+{"key": "cloud|0|7|0", "grounded": true, "reason": "Ответ полностью соответствует цитате: указаны те же поля (`id` и `messageId`) и их типы."}
+{"key": "cloud|0|8|0", "grounded": true, "reason": "Ответ соответствует цитатам: используется currentWindowAdaptiveInfo() и currentWindowSize(), проверка WindowSizeClass, windowPosture.isTabletop для NavigationBar, ширина >= 1200.dp для NavigationDrawer, компактность или isTabletop для NavigationBar, иначе NavigationRail."}
+{"key": "cloud|0|9|0", "grounded": true, "reason": "Утверждение в ответе полностью соответствует цитате, которая называет те же три компонента."}
+{"key": "cloud|0|10|0", "grounded": true, "reason": "Цитата подтверждает указанный в ответе год Copyright — 2024."}
+{"key": "cloud|0|11|0", "grounded": true, "reason": "Ответ полностью соответствует логике цитаты: сначала проверка tabletop (нижняя панель), затем compact (нижняя панель), затем ширина >= 1200.dp (выдвижная панель), иначе — панель-рельса."}
+{"key": "cloud|0|12|0", "grounded": true, "reason": "Цитата подтверждает, что сообщения экспортируются как StateFlow<List<Message>>, что соответствует ответу."}
+{"key": "cloud|1|1|0", "grounded": true, "reason": "Цитата [1] явно указывает, что addMessage(msg) добавляет сообщение в начало списка через _messages.add(0, msg), что полностью подтверждает ответ ассистента."}
+{"key": "cloud|1|1|1", "grounded": true, "reason": "В цитате явно указано, что addMessage добавляет сообщение в начало списка через _messages.add(0, msg), что соответствует ответу ассистента."}
+{"key": "cloud|1|1|2", "grounded": true, "reason": "Цитата [1] показывает, что addMessage добавляет сообщение в начало списка (_messages.add(0, msg)), что соответствует утверждению в ответе."}
+{"key": "cloud|1|2|0", "grounded": true, "reason": "Ответ полностью соответствует цитате [1], в которой перечислены те же три параметра: channelName (String), channelMembers (Int) и initialMessages (List<Message>)."}
+{"key": "cloud|1|2|1", "grounded": true, "reason": "Ответ точно соответствует цитате [1], где указаны те же три параметра: channelName, channelMembers и initialMessages с теми же типами."}
+{"key": "cloud|1|2|2", "grounded": true, "reason": "Цитата [1] точно соответствует описанию: три параметра — channelName (String), channelMembers (Int) и initialMessages (List<Message>)."}
+{"key": "cloud|1|3|0", "grounded": true, "reason": "Все три теста и их описания соответствуют цитатам [1], [2], [3] и [4] (где [4] — часть цитаты [3] про NavigationTest)."}
+{"key": "cloud|1|3|1", "grounded": true, "reason": "Ответ полностью соответствует цитатам: перечислены те же три теста с теми же описаниями их назначения."}
+{"key": "cloud|1|3|2", "grounded": true, "reason": "Все три пункта ответа (ConversationTest, UserInputTest, NavigationTest) и их краткие описания напрямую соответствуют цитатам. Цитата [2] подтверждает тест для экрана беседы и проверку смены тёмной темы, [3] — проверку ввода с клавиатурой, [4] — тесты навигации по контроллеру."}
+{"key": "cloud|1|4|0", "grounded": true, "reason": "Цитаты содержат точно те же три свойства: isLoading, errorMessages, searchInput."}
+{"key": "cloud|1|4|1", "grounded": true, "reason": "Цитата явно перечисляет три свойства: isLoading, errorMessages, searchInput, что полностью совпадает с ответом."}
+{"key": "cloud|1|4|2", "grounded": true, "reason": "Цитата подтверждает, что HomeUiState объявляет именно три указанных свойства: isLoading, errorMessages и searchInput."}
+{"key": "cloud|1|5|1", "grounded": true, "reason": "Ответ ассистента верно указывает, что цитаты не содержат информации о функции upPress() и аннотации класса, что соответствует содержанию цитаты."}
+{"key": "cloud|1|6|0", "grounded": true, "reason": "Ответ полностью соответствует коду: SnackbarManager объявлен как object, messages — StateFlow из MutableStateFlow, showMessage принимает @StringRes и добавляет Message с id, setMessageShown фильтрует по id."}
+{"key": "cloud|1|6|2", "grounded": true, "reason": "Ответ утверждает, что SnackbarManager — это object (синглтон) и что он предоставляет сообщения через StateFlow<List<Message>>, доступный через свойство messages, основанное на приватном MutableStateFlow. Цитата [1] полностью подтверждает это."}
+{"key": "cloud|1|7|0", "grounded": true, "reason": "Цитата явно содержит поля id и messageId с указанными типами, что полностью соответствует ответу."}
+{"key": "cloud|1|7|1", "grounded": true, "reason": "Ответ точно соответствует цитате: указаны поля id (Long) и messageId (Int c аннотацией @StringRes), как в исходном коде."}
+{"key": "cloud|1|7|2", "grounded": true, "reason": "Цитата содержит именно те поля и типы, которые указаны в ответе: id типа Long и messageId типа Int с аннотацией @StringRes."}
+{"key": "cloud|1|8|0", "grounded": true, "reason": "Ответ точно соответствует логике из цитаты: проверка tabletop, compact, ширины >= expanded и 1200.dp, только в ответе уточнена ширина в dp (1200.dp) — это верно."}
+{"key": "cloud|1|8|1", "grounded": true, "reason": "Ответ точно описывает логику из цитаты, включая используемые API и условия выбора типа навигации."}
+{"key": "cloud|1|8|2", "grounded": true, "reason": "Ответ полностью соответствует логике и API из цитаты [1]: проверка tablet top posture, компактного класса, ширины >= 1200.dp и использование NavigationBar/NavigationDrawer/NavigationRail."}
+{"key": "cloud|1|9|0", "grounded": true, "reason": "Ответ полностью соответствует цитате [1], где перечислены те же три компонента."}
+{"key": "cloud|1|9|1", "grounded": true, "reason": "Ответ полностью соответствует цитате, называя те же три компонента: home screen, podcast details screen и player screen."}
+{"key": "cloud|1|9|2", "grounded": true, "reason": "Цитата подтверждает наличие трёх основных экранов (home, details, player) и упоминает разбиение home на подэкраны (Home, Discover, Podcast Category)."}
+{"key": "cloud|1|10|0", "grounded": true, "reason": "Цитата подтверждает, что в верхнем README указан год 2024."}
+{"key": "cloud|1|10|1", "grounded": true, "reason": "Цитата [1] явно указывает год 2024 в заголовке лицензии, что полностью соответствует ответу."}
+{"key": "cloud|1|10|2", "grounded": true, "reason": "Цитата подтверждает, что в корневом README указан copyright 2024."}
+{"key": "cloud|1|11|0", "grounded": true, "reason": "Ответ полностью соответствует цитате [1] как по логике выбора типа навигации, так и по правилу определения позиции контента."}
+{"key": "cloud|1|11|1", "grounded": true, "reason": "Ответ полностью соответствует логике цитаты: используется `windowPosture.isTabletop`, проверка на compact, ширина ≥1200.dp для NavigationDrawer, иначе NavigationRail, а также упомянуты `currentWindowAdaptiveInfo()` (аналог `adaptiveInfo`) и размер окна в dp."}
+{"key": "cloud|1|11|2", "grounded": true, "reason": "Ответ ассистента полностью соответствует цитатам: указаны те же типы навигации для разных размеров устройств, а логика выбора из цитаты [2] дословно совпадает с описанной в ответе (tabletop/compact → NavigationBar, ширина ≥1200.dp → NavigationDrawer, иначе NavigationRail)."}
+{"key": "cloud|1|12|0", "grounded": true, "reason": "Цитата прямо подтверждает, что свойство messages имеет тип StateFlow<List<Message>>."}
+{"key": "cloud|1|12|1", "grounded": true, "reason": "Цитата [1] прямо содержит объявление `val messages: StateFlow<List<Message>>`, что полностью подтверждает тип, указанный в ответе."}
+{"key": "cloud|1|12|2", "grounded": true, "reason": "Цитата [1] прямо указывает, что тип `messages` — `StateFlow<List<Message>>`, что совпадает с утверждением ответа."}
+{"key": "local|0|4|0", "grounded": true, "reason": "Ответ ассистента полностью соответствует цитате: в sealed interface HomeUiState объявлены именно те три свойства: isLoading, errorMessages, searchInput."}
+{"key": "local|0|5|0", "grounded": false, "reason": "Цитата не содержит описания функции upPress() и не подтверждает, что класс JetsnackNavController помечен аннотацией @Composable; в цитате аннотация стоит на функции, а не на классе."}
+{"key": "local|0|6|0", "grounded": true, "reason": "Цитата явно показывает, что SnackbarManager объявлен как object, а messages является StateFlow, что полностью подтверждает ответ."}
+{"key": "local|0|7|0", "grounded": true, "reason": "Ответ утверждает, что ErrorMessage содержит поля id и messageId, что полностью соответствует цитате [1], где указаны те же поля с теми же типами."}
+{"key": "local|0|9|0", "grounded": false, "reason": "Цитаты указывают три компонента: домашний экран, экран деталей подкаста и экран плеера, а в ответе названы Home, Discover и Podcast Category, что не соответствует источникам."}
+{"key": "local|0|10|0", "grounded": true, "reason": "Цитата содержит 'Copyright 2024', что соответствует году в ответе."}
+{"key": "local|0|11|0", "grounded": true, "reason": "Ответ дословно повторяет содержание цитаты [1]."}
+{"key": "local|1|3|0", "grounded": true, "reason": "Ответ подтверждает наличие трёх тестовых файлов и их назначение, что соответствует цитатам и описанию тестов."}
+{"key": "local|1|6|0", "grounded": true, "reason": "Ответ подтверждает, что SnackbarManager объявлен как object, и это следует из цитаты [1]."}
+{"key": "local|1|7|0", "grounded": true, "reason": "Ответ соответствует цитате: указаны поля id типа Long и messageId с аннотацией @StringRes, что в точности совпадает с определением класса."}
+{"key": "local|1|10|0", "grounded": true, "reason": "Цитата напрямую подтверждает, что в README указан год 2024."}
+{"key": "local|1|11|0", "grounded": false, "reason": "В цитате нет упоминания о выборе типа навигации через prop `navigationType` или каком-либо динамическом выборе в зависимости от размера и состояния устройства."}
+{"key": "local|1|12|0", "grounded": false, "reason": "Цитата не содержит информации о том, что SnackbarManager выставляет сообщения типа Message; в ней лишь сказано, что класс отвечает за управление сообщениями, но тип не упоминается."}
+{"key": "local|1|2|1", "grounded": true, "reason": "Цитата показывает, что класс принимает channelName, channelMembers и initialMessages, что полностью соответствует утверждению ассистента."}
+{"key": "local|1|3|1", "grounded": true, "reason": "Ответ подтверждается цитатами, не содержит выдумок или противоречий."}
+{"key": "local|1|3|2", "grounded": false, "reason": "Цитата не описывает ConversationTest и UserInputTest, а описание NavigationTest в ответе совпадает с цитатой, но ответ добавляет сведения о ConversationTest и UserInputTest, которые не подтверждены предоставленными цитатами."}
+{"key": "local|1|6|1", "grounded": true, "reason": "Ответ полностью соответствует цитате: SnackbarManager объявлен как object, содержит метод showMessage с параметром @StringRes, добавляющий сообщение в _messages (MutableStateFlow), а messages — это StateFlow, через который можно наблюдать изменения."}
+{"key": "local|1|6|2", "grounded": false, "reason": "В цитате указано только 'object SnackbarManager', что подтверждает, что это объект, но нет подтверждения, что это класс Jetpack Compose, а также не упоминаются свойства messages: StateFlow<List<Message>> и метод setMessageShown(messageId: Long), описанные в ответе."}
+{"key": "local|1|7|1", "grounded": true, "reason": "Цитата подтверждает, что ErrorMessage содержит поля id (тип Long) и messageId (тип Int с аннотацией @StringRes), что полностью соответствует ответу."}
+{"key": "local|1|7|2", "grounded": true, "reason": "Ответ полностью соответствует цитате: поля id (Long) и messageId (Int) указаны в определении data class ErrorMessage."}
+{"key": "local|1|9|1", "grounded": false, "reason": "Цитата указывает три компонента: home screen, podcast details screen, player screen. Ответ называет Home, Discover и Podcast Category — два последних не упоминаются в источнике."}
+{"key": "local|1|9|2", "grounded": false, "reason": "В цитате указаны компоненты: home screen, podcast details screen, player screen. В ответе названы Home, Discover и Podcast Category — это не соответствует цитате (podcast details screen заменён на Discover и Podcast Category)."}
+{"key": "local|1|10|1", "grounded": true, "reason": "Цитата [1] явно указывает год 2024 в заголовке лицензии."}
+{"key": "local|1|10|2", "grounded": true, "reason": "Цитата [1] прямо указывает 'Copyright 2024', что соответствует ответу '2024'."}
+{"key": "local|1|11|1", "grounded": false, "reason": "Цитата не содержит информации о динамическом выборе типа навигации через prop navigationType в зависимости от размера и состояния устройства, что утверждается в ответе."}
+{"key": "local|1|11|2", "grounded": false, "reason": "В цитате нет информации о выборе типа навигации через prop 'navigationType' в зависимости от размера и состояния устройства."}
+{"key": "local|1|12|1", "grounded": false, "reason": "В цитате нет упоминания типа Message, ответ приписывает SnackbarManager свойство, не подтверждённое источником."}
+{"key": "local|1|12|2", "grounded": true, "reason": "Цитата подтверждает, что класс отвечает за управление сообщениями Snackbar, и ответ уточняет, что они имеют тип Message, что логически следует из контекста и не противоречит цитате."}

@@ -1,0 +1,117 @@
+[
+  {
+    "id": 1,
+    "question": "In Jetchat's ConversationUiState, what does the addMessage(msg) function do — at which position in the list is a new message inserted?",
+    "expectation": "It inserts the new message at the beginning of the list (index 0): _messages.add(0, msg). Comment says 'Add to the beginning of the list'.",
+    "expected_sources": ["Jetchat/app/src/main/java/com/example/compose/jetchat/conversation/ConversationUiState.kt"]
+  },
+  {
+    "id": 2,
+    "question": "What constructor parameters does Jetchat's ConversationUiState class take?",
+    "expectation": "channelName: String, channelMembers: Int, initialMessages: List<Message>. Internally keeps a MutableList backed by toMutableStateList().",
+    "expected_sources": ["Jetchat/app/src/main/java/com/example/compose/jetchat/conversation/ConversationUiState.kt"]
+  },
+  {
+    "id": 3,
+    "question": "Which UI tests are included in the Jetchat androidTest suite, and what does each one cover?",
+    "expectation": "UserInputTest; ConversationTest (UI tests for the Conversation screen, incl. a test for behavior when dark mode changes); NavigationTest (asserts directly on the Navigation Controller / NavController).",
+    "expected_sources": ["Jetchat/README.md"]
+  },
+  {
+    "id": 4,
+    "question": "In JetNews's HomeViewModel, HomeUiState is a sealed interface. Which three common properties does it declare?",
+    "expectation": "isLoading: Boolean, errorMessages: List<ErrorMessage>, searchInput: String.",
+    "expected_sources": ["JetNews/app/src/main/java/com/example/jetnews/ui/home/HomeViewModel.kt"]
+  },
+  {
+    "id": 5,
+    "question": "In Jetsnack's JetsnackNavController, what does the upPress() function do, and what annotation is the class marked with?",
+    "expectation": "upPress() calls navController.navigateUp(). The class is annotated @Stable.",
+    "expected_sources": ["Jetsnack/app/src/main/java/com/example/jetsnack/ui/navigation/JetsnackNavController.kt"]
+  },
+  {
+    "id": 6,
+    "question": "In Jetsnack, what kind of Kotlin declaration is SnackbarManager, and how does it expose its messages?",
+    "expectation": "It is an object (singleton) responsible for managing snackbar messages. It backs a private MutableStateFlow<List<Message>> _messages and exposes it as a read-only StateFlow<List<Message>> via messages; showMessage takes a @StringRes messageTextId.",
+    "expected_sources": ["Jetsnack/app/src/main/java/com/example/jetsnack/model/SnackbarManager.kt"]
+  },
+  {
+    "id": 7,
+    "question": "What fields does the ErrorMessage data class in JetNews contain?",
+    "expectation": "id: Long and messageId: Int annotated with @StringRes. i.e. data class ErrorMessage(val id: Long, @StringRes val messageId: Int).",
+    "expected_sources": ["JetNews/app/src/main/java/com/example/jetnews/utils/ErrorMessage.kt"]
+  },
+  {
+    "id": 8,
+    "question": "In Reply's ReplyNavigationWrapper composable, how is the navigation layout type decided (what APIs drive it)?",
+    "expectation": "It uses currentWindowAdaptiveInfo() and currentWindowSize() (converted to DpSize) and computes a navLayoutType with a when-expression to pick the adaptive navigation layout based on window size/posture.",
+    "expected_sources": ["Reply/app/src/main/java/com/example/reply/ui/navigation/ReplyNavigationComponents.kt"]
+  },
+  {
+    "id": 9,
+    "question": "What are the three main screens/components of the Jetcaster phone app?",
+    "expectation": "The home screen, the podcast details screen, and the player screen.",
+    "expected_sources": ["Jetcaster/README.md"]
+  },
+  {
+    "id": 10,
+    "question": "What copyright year is stated in the top-level (root) README license header of the Jetpack Compose Samples repository?",
+    "expectation": "2024 ('Copyright 2024 The Android Open Source Project') in the root README — note individual samples like Jetchat/Jetsnack state 2020, so the root differs.",
+    "expected_sources": ["README.md"]
+  },
+  {
+    "id": 11,
+    "context": [
+      {"role": "user", "content": "Tell me about the Reply sample's navigation."},
+      {"role": "assistant", "content": "Reply uses adaptive Material 3 navigation components (bottom bar, navigation rail, drawer) chosen by window size."}
+    ],
+    "question": "How does it decide which one to show?",
+    "expectation": "ReplyNavigationWrapper uses currentWindowAdaptiveInfo() and currentWindowSize() (as DpSize) and a when-expression to pick navLayoutType based on the window size class / posture. The follow-up 'it' = Reply navigation; only resolvable from context.",
+    "expected_sources": ["Reply/app/src/main/java/com/example/reply/ui/navigation/ReplyNavigationComponents.kt"]
+  },
+  {
+    "id": 12,
+    "context": [
+      {"role": "user", "content": "Tell me about the SnackbarManager in Jetsnack."},
+      {"role": "assistant", "content": "SnackbarManager is an object that manages snackbar messages shown in Jetsnack."}
+    ],
+    "question": "What type does it expose them as?",
+    "expectation": "It exposes the messages as a read-only StateFlow<List<Message>> (backed by a private MutableStateFlow, surfaced via asStateFlow()). 'it' = SnackbarManager, 'them' = messages; only resolvable from context.",
+    "expected_sources": ["Jetsnack/app/src/main/java/com/example/jetsnack/model/SnackbarManager.kt"]
+  },
+  {
+    "id": 13,
+    "offtopic": true,
+    "question": "What is the boiling point of water at sea level?",
+    "expectation": "Off-topic: not in the compose-samples corpus. The assistant must abstain («не знаю») and ask to refine — no answer from the model's own knowledge.",
+    "expected_sources": []
+  },
+  {
+    "id": 14,
+    "offtopic": true,
+    "question": "Who won the FIFA World Cup in 1998?",
+    "expectation": "Off-topic: not in the corpus. Assistant must abstain.",
+    "expected_sources": []
+  },
+  {
+    "id": 15,
+    "offtopic": true,
+    "question": "Give me a recipe for classic Italian tiramisu.",
+    "expectation": "Off-topic: not in the corpus. Assistant must abstain.",
+    "expected_sources": []
+  },
+  {
+    "id": 16,
+    "offtopic": true,
+    "question": "What is the capital of Australia?",
+    "expectation": "Off-topic: not in the corpus. Assistant must abstain.",
+    "expected_sources": []
+  },
+  {
+    "id": 17,
+    "offtopic": true,
+    "question": "How does photosynthesis convert sunlight into energy in plants?",
+    "expectation": "Off-topic: not in the corpus. Assistant must abstain.",
+    "expected_sources": []
+  }
+]
