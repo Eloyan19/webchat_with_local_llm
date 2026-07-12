@@ -1,12 +1,13 @@
 [Unit]
 Description=Web Chat (local LLM) backend — FastAPI /chat proxy to Ollama (qwen2.5:3b)
-After=network.target ollama.service
-Wants=ollama.service
+After=network.target ollama.service rag-search.service
+Wants=ollama.service rag-search.service
 
 [Service]
 Type=simple
 WorkingDirectory=/root/repos/webchat_with_local_llm/backend
 EnvironmentFile=/root/repos/webchat_with_local_llm/backend/.env
+Environment=RAG_URL=http://127.0.0.1:8100
 ExecStart=/root/repos/webchat_with_local_llm/backend/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8010
 Restart=always
 RestartSec=3

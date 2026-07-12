@@ -78,10 +78,103 @@
   letter-spacing: 0.03em;
 }
 
+.sources {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  opacity: 0.85;
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  padding-top: 0.4rem;
+}
+
+.sources-title {
+  font-weight: 600;
+}
+
+.sources ol {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.sources code {
+  font-size: 0.75rem;
+}
+
+.sources .quote {
+  margin: 0.3rem 0 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border-left: 3px solid rgba(128, 128, 128, 0.5);
+  background: rgba(128, 128, 128, 0.1);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.chunk-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
 .error {
   color: #c53030;
   padding: 0.5rem 0;
   font-size: 0.9rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.75rem;
+}
+
+.rag-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rag-toggle input {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
+.temp-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.temp-segment {
+  display: flex;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.temp-option {
+  padding: 0.3rem 0.7rem;
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.temp-option + .temp-option {
+  border-left: 1px solid rgba(128, 128, 128, 0.4);
+}
+
+.temp-option.active {
+  background: #2b6cb0;
+  color: #fff;
 }
 
 .composer {

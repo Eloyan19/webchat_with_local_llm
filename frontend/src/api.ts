@@ -1,4 +1,4 @@
-import type { Message } from './types'
+import type { Message, Source } from './types'
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000'
 const CHAT_TOKEN = import.meta.env.VITE_CHAT_TOKEN ?? ''
@@ -6,6 +6,7 @@ export const MAX_CONTEXT = 20
 
 export interface ChatResult {
   reply: string
+  sources: Source[]
 }
 
 type WireMessage = { role: string; content: string }
@@ -16,11 +17,16 @@ function headers(): Record<string, string> {
   return h
 }
 
-async function postChat(messages: WireMessage[]): Promise<ChatResult> {
+async function postChat(
+  messages: WireMessage[],
+  useRag: boolean,
+  improvedRag: boolean,
+  temperature: number,
+): Promise<ChatResult> {
   const res = await fetch(`${API_BASE}/chat`, {
     method: 'POST',
     headers: headers(),
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, useRag, improvedRag, temperature }),
   })
   if (!res.ok) {
     const text = await res.text()
@@ -29,10 +35,16 @@ async function postChat(messages: WireMessage[]): Promise<ChatResult> {
   const data = await res.json()
   return {
     reply: data.reply as string,
+    sources: (data.sources ?? []) as Source[],
   }
 }
 
-export async function sendChat(messages: Message[], summary: string = ''): Promise<ChatResult> {
+export async function sendChat(
+  messages: Message[],
+  useRag: boolean,
+  temperature: number,
+  summary: string = '',
+): Promise<ChatResult> {
   const window = messages.slice(-MAX_CONTEXT)
   const wire: WireMessage[] = window.map((m) => ({ role: m.role, content: m.content }))
   if (summary) {
@@ -42,9 +54,9 @@ export async function sendChat(messages: Message[], summary: string = ''): Promi
     })
   }
   console.log(
-    `[chat] sending ${wire.length} messages (history ${messages.length}, summary=${summary ? 'yes' : 'no'})`,
+    `[chat] sending ${wire.length} messages (history ${messages.length}, summary=${summary ? 'yes' : 'no'}, useRag=${useRag}, temperature=${temperature})`,
   )
-  return postChat(wire)
+  return postChat(wire, useRag, useRag, temperature)
 }
 
 // Condense the messages that fell out of the takeLast(MAX_CONTEXT) window into a
@@ -56,6 +68,6 @@ export async function summarize(previousSummary: string, dropped: Message[]): Pr
     `Новые сообщения, которые нужно добавить в summary:\n${convo}\n\n` +
     `Обнови summary: в 3–6 предложениях сохрани ключевые факты, решения, имена и числа ` +
     `из всего диалога. Верни только текст summary, без пояснений.`
-  const { reply } = await postChat([{ role: 'user', content: prompt }])
+  const { reply } = await postChat([{ role: 'user', content: prompt }], false, false, 0)
   return reply.trim()
 }
