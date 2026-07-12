@@ -1,11 +1,12 @@
 # Web Chat · Local LLM
 
-Минимальный веб-чат поверх **локальной** LLM через [Ollama](https://ollama.com)
-(`qwen2.5:3b`). Тот же интерфейс, что у соседнего `../webchat`, но вместо облачного
-DeepSeek — модель, крутящаяся прямо на VPS. Без RAG, цитат и «памяти задачи» —
-намеренно минимально.
+Веб-чат поверх **локальной** LLM через [Ollama](https://ollama.com) (`qwen2.5:3b`) с
+**RAG** поверх локального индекса: retrieval и генерация полностью на VPS, ответы с
+дословными цитатами и гейтом «не знаю». Тот же интерфейс, что у соседнего `../webchat`,
+но вместо облачного DeepSeek — модель, крутящаяся прямо на сервере.
 
-Публичный URL (прод): **https://llm.jorchik.com**
+- 🌐 **Живой чат:** https://llm.jorchik.com
+- 📊 **Сравнение local vs cloud** (качество / скорость / стабильность): [`eval/REPORT-local-vs-cloud.md`](eval/REPORT-local-vs-cloud.md)
 
 ## Архитектура
 
@@ -18,7 +19,8 @@ DeepSeek — модель, крутящаяся прямо на VPS. Без RAG,
 ```
 
 - Браузер **не** ходит в Ollama напрямую — только через свой backend (единый origin).
-- Контракт: `POST /chat {messages:[{role,content}]} → {reply}`, `GET /health → {ok}`.
+- Retrieval — по HTTP к соседнему `rag`-сервису (`:8100`), генерация — Ollama (`:11434`).
+- Контракт: `POST /chat {messages, useRag, improvedRag, temperature} → {reply, sources, rewrittenQuery, ragMeta}`, `GET /health → {ok}`.
 
 ## Стек
 TypeScript · React · Vite · Python · FastAPI · httpx · localStorage.
@@ -39,12 +41,14 @@ npm run dev                                # Vite dev-server, зовёт http://
 ```
 
 Модель и адрес Ollama настраиваются через env: `OLLAMA_MODEL` (по умолч. `qwen2.5:3b`),
-`OLLAMA_URL` (по умолч. `http://127.0.0.1:11434/v1/chat/completions`).
+`OLLAMA_URL` (по умолч. нативный `http://127.0.0.1:11434/api/chat`), `RAG_URL`
+(по умолч. `http://127.0.0.1:8100`). RAG-режиму нужен запущенный `rag`-сервис.
 
 ## Деплой
 См. [`deploy/README.md`](deploy/README.md) — systemd + nginx на поддомене
 `llm.jorchik.com` (нужна DNS A-запись + `certbot --nginx -d llm.jorchik.com`).
 
 ## Замечание про скорость
-`qwen2.5:3b` работает на CPU — ответ приходит **заметно медленнее**, чем от облачного
-DeepSeek. Таймауты (httpx 180 c, nginx `proxy_read_timeout 180s`) выставлены с запасом.
+`qwen2.5:3b` работает на CPU — grounded-ответ с RAG занимает **~60–250 c** (против ~8 c у
+облачного DeepSeek, см. отчёт сравнения). httpx-таймаут backend — `OLLAMA_TIMEOUT` (по умолч.
+300 c). На 3.8 ГБ RAM нужен swap: qwen @ num_ctx=4096 иначе упирается в OOM-killer.
