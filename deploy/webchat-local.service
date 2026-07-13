@@ -16,6 +16,10 @@ Environment=PROMPT_VARIANT=copyfirst
 Environment=RAG_K_AFTER=6
 Environment=OLLAMA_NUM_CTX=3072
 Environment=OLLAMA_NUM_PREDICT=384
+# Прод: без grounded-ретрая (иначе 2 генерации > nginx 300s → 504) и с запасом по
+# таймауту одного вызова (270 < nginx 300). Худший ответ укладывается в таймаут.
+Environment=GROUNDED_RETRY=0
+Environment=OLLAMA_TIMEOUT=270
 ExecStart=/root/repos/webchat_with_local_llm/backend/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8010
 Restart=always
 RestartSec=3

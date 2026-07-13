@@ -25,6 +25,11 @@ OLLAMA_TIMEOUT = float(os.getenv("OLLAMA_TIMEOUT", "300"))
 OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
 OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "512"))
 PROMPT_VARIANT = os.getenv("PROMPT_VARIANT", "baseline")
+# Ретрай grounded-генерации при пустых валидных цитатах удваивает время ответа (вторая
+# генерация 3B). На проде выключаем (GROUNDED_RETRY=0), чтобы худший случай = одна
+# генерация и не упирался в nginx-таймаут (иначе — 504). Coder цитирует чисто с первого
+# раза, так что потеря качества минимальна. По умолчанию on — для eval/воспроизводимости.
+GROUNDED_RETRY = os.getenv("GROUNDED_RETRY", "1") == "1"
 RAG_URL = os.getenv("RAG_URL", "http://127.0.0.1:8100")
 
 # Plain RAG: single-stage retrieval. Improved RAG: retrieve more (k_before),
@@ -351,6 +356,12 @@ async def generate_grounded(
     reply, sources, dropped, json_ok = parse_grounded_reply(raw, chunks)
     json_parse_failed = not json_ok
     if sources:
+        return reply, sources, dropped, False, json_parse_failed
+
+    # Ретрай выключен (прод): не запускаем вторую генерацию — худший случай остаётся
+    # в пределах одной генерации, ответ не упирается в nginx-таймаут. Нет валидных
+    # цитат → caller абстейнит («не знаю»), как и после неудачного ретрая.
+    if not GROUNDED_RETRY:
         return reply, sources, dropped, False, json_parse_failed
 
     nudge = QUOTE_RETRY_NUDGE if json_ok else JSON_RETRY_NUDGE
