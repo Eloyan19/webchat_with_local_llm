@@ -8,6 +8,7 @@
 - 🌐 **Живой чат:** https://llm.jorchik.com
 - 📊 **Сравнение local vs cloud** (качество / скорость / стабильность): [`eval/REPORT-local-vs-cloud.md`](eval/REPORT-local-vs-cloud.md)
 - ⚙️ **Оптимизация под задачу** (до/после: параметры, промпт, модель): [`eval/REPORT-optimization.md`](eval/REPORT-optimization.md)
+- ❓ **Примеры вопросов** (на что отвечает RAG-режим): [`EXAMPLE-QUESTIONS.md`](EXAMPLE-QUESTIONS.md)
 
 ## Архитектура
 
