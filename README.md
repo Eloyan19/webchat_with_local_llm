@@ -17,12 +17,55 @@
                       ├─ /       → статика фронта  /var/www/webchat-local
                       └─ /chat   → backend  127.0.0.1:8010  (systemd: webchat-local.service)
                                        │
-                                       └─ Ollama  127.0.0.1:11434  (qwen2.5:3b, OpenAI-совместимый API)
+                                       └─ Ollama  127.0.0.1:11434  (qwen2.5-coder:3b, нативный /api/chat)
 ```
 
 - Браузер **не** ходит в Ollama напрямую — только через свой backend (единый origin).
 - Retrieval — по HTTP к соседнему `rag`-сервису (`:8100`), генерация — Ollama (`:11434`).
-- Контракт: `POST /chat {messages, useRag, improvedRag, temperature} → {reply, sources, rewrittenQuery, ragMeta}`, `GET /health → {ok}`.
+
+## HTTP API
+
+Приватный AI-сервис поверх локальной LLM. Публичный вход — `https://llm.jorchik.com`,
+защищён gate-токеном (заголовок `Authorization: Bearer <token>`) и rate-limit'ом на nginx.
+
+**`GET /health`** → `{"ok": true}` — без токена, для проверки живости.
+
+**`POST /chat`** (нужен `Authorization: Bearer <token>`):
+```jsonc
+// запрос
+{
+  "messages":   [{"role": "user", "content": "..."}],  // история диалога
+  "useRag":      true,      // RAG-режим (ответ с цитатами из индекса) или обычный чат
+  "improvedRag": true,      // query-rewrite + rerank + порог (при useRag)
+  "temperature": 0          // 0 = детерминированно/точно, 1 = креативно
+}
+// ответ
+{
+  "reply":   "...",                     // текст ответа (или «не знаю», если нет источника)
+  "sources": [{"file","section","quote","chunk_id"}],  // цитаты (в RAG-режиме)
+  "rewrittenQuery": "...",              // переписанный поисковый запрос (или null)
+  "ragMeta": { "abstained": false, ... }// диагностика: порог, отброшенные цитаты и т.п.
+}
+```
+Пример:
+```sh
+curl -X POST https://llm.jorchik.com/chat \
+  -H 'Authorization: Bearer <token>' -H 'Content-Type: application/json' \
+  -d '{"messages":[{"role":"user","content":"What fields does the ErrorMessage data class in JetNews contain?"}],"useRag":true,"improvedRag":true,"temperature":0}'
+```
+
+## Ограничения и приватность
+
+| | Значение |
+|---|---|
+| **Авторизация** | gate-токен (`Bearer`), проверяется nginx до backend |
+| **Rate limit** | 30 req/min на IP, burst 10 (nginx `limit_req`), сверх → `429` |
+| **Max context** | окно модели `num_ctx=3072`; фронт шлёт последние 20 сообщений + скользящее summary |
+| **Таймаут ответа** | backend 270 c / nginx 300 c (медленные ответы не рубятся) |
+| **Параллелизм** | Ollama обрабатывает запросы по очереди (одна модель на CPU); несколько запросов не роняют сервис, а выстраиваются в очередь |
+
+Проверено: доступ по сети (HTTPS), стабильность при нескольких одновременных запросах
+(все `200`), срабатывание rate-limit (`429` сверх burst), соблюдение max context.
 
 ## Стек
 TypeScript · React · Vite · Python · FastAPI · httpx · localStorage.
