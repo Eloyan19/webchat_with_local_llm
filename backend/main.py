@@ -19,6 +19,12 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
 # 3B на CPU медленный: grounded-ответ на 8 чанках кода (num_ctx 4096, до 512 токенов)
 # заметно превышает дефолтные 120 c. Держим щедрый таймаут, конфигурируемый под железо.
 OLLAMA_TIMEOUT = float(os.getenv("OLLAMA_TIMEOUT", "300"))
+# Tunable-параметры генерации (перебираем при оптимизации под задачу). num_ctx —
+# окно контекста (дефолт 2048 у Ollama обрезал бы чанки), num_predict — кап токенов
+# ответа. PROMPT_VARIANT выбирает шаблон grounded-промпта: baseline | copyfirst.
+OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "4096"))
+OLLAMA_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "512"))
+PROMPT_VARIANT = os.getenv("PROMPT_VARIANT", "baseline")
 RAG_URL = os.getenv("RAG_URL", "http://127.0.0.1:8100")
 
 # Plain RAG: single-stage retrieval. Improved RAG: retrieve more (k_before),
@@ -115,8 +121,8 @@ async def call_ollama(
             "temperature": temperature,
             "seed": 42,
             "top_p": 1,
-            "num_ctx": 4096,
-            "num_predict": 512,
+            "num_ctx": OLLAMA_NUM_CTX,
+            "num_predict": OLLAMA_NUM_PREDICT,
         },
     }
     if json_mode:
@@ -170,14 +176,17 @@ async def rag_search(query: str, k: int, rerank: bool) -> list[dict]:
         return []
 
 
-def build_system_prompt(chunks: list[dict]) -> str:
-    """System prompt that pins the model to the context and forces a cited JSON
-    reply. Chunks are numbered [1..n]; the model must echo those ids in `used`."""
+def _number_chunks(chunks: list[dict]) -> str:
+    """Нумерованный контекст [1..n] — общий для всех prompt-вариантов."""
     blocks = [
         f"[{i}] {c.get('file', '')} :: {c.get('section', '')}\n{c.get('text', '')}"
         for i, c in enumerate(chunks, start=1)
     ]
-    context = "\n\n".join(blocks)
+    return "\n\n".join(blocks)
+
+
+def _prompt_baseline(context: str) -> str:
+    """Исходный grounded-промпт (baseline для оптимизации)."""
     return (
         "Ты отвечаешь на вопрос пользователя, опираясь ТОЛЬКО на приведённый ниже "
         "контекст из базы знаний. Верни СТРОГО один JSON-объект такого вида:\n"
@@ -195,6 +204,40 @@ def build_system_prompt(chunks: list[dict]) -> str:
         "- Не выдумывай факты и цитаты вне контекста.\n\n"
         f"Контекст:\n{context}"
     )
+
+
+def _prompt_copyfirst(context: str) -> str:
+    """Copy-first вариант под слабую 3B: сперва ДОСЛОВНО скопировать строку в quote,
+    потом писать answer. Один few-shot с кодовой цитатой; минимум лишних инструкций.
+    Цель — снизить ложные абстейны из-за перефразированных/переведённых цитат."""
+    return (
+        "Отвечай ТОЛЬКО по контексту ниже. Работай в ДВА шага:\n"
+        "1) Для каждого источника, который используешь, СКОПИРУЙ из его текста короткий "
+        "фрагмент СИМВОЛ-В-СИМВОЛ — как есть, на языке оригинала (обычно код/английский). "
+        "НЕ переводи, НЕ перефразируй, НЕ меняй регистр, пробелы и пунктуацию. Это quote.\n"
+        "2) Потом сформулируй answer на языке вопроса, опираясь на эти quote; ссылайся на "
+        "источники по номеру [i].\n"
+        "Верни СТРОГО один JSON:\n"
+        '{"answer": "...", "used": [{"id": <номер>, "quote": "<точная подстрока источника>"}]}\n\n'
+        "Пример формата:\n"
+        "Контекст: [1] Foo.kt :: class Foo\nclass Foo(val bar: Int) { fun baz() = bar * 2 }\n"
+        "Вопрос: Что делает baz()?\n"
+        'Ответ: {"answer": "baz() возвращает bar, умноженный на 2 [1].", '
+        '"used": [{"id": 1, "quote": "fun baz() = bar * 2"}]}\n\n'
+        "Важно: quote обязана ДОСЛОВНО встречаться в тексте своего источника, иначе она "
+        "отбрасывается. Не можешь скопировать дословно — не цитируй этот источник. Если "
+        "ответа в контексте нет — answer «Не знаю: в источниках нет ответа» и used: [].\n\n"
+        f"Контекст:\n{context}"
+    )
+
+
+def build_system_prompt(chunks: list[dict]) -> str:
+    """System prompt, пиннящий модель к контексту и требующий cited JSON. Шаблон
+    выбирается через PROMPT_VARIANT (baseline | copyfirst) — рычаг оптимизации."""
+    context = _number_chunks(chunks)
+    if PROMPT_VARIANT == "copyfirst":
+        return _prompt_copyfirst(context)
+    return _prompt_baseline(context)
 
 
 # Типографские варианты, которые модель (и исходный текст) может использовать

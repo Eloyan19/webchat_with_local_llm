@@ -1,5 +1,5 @@
 [Unit]
-Description=Web Chat (local LLM) backend — FastAPI /chat proxy to Ollama (qwen2.5:3b)
+Description=Web Chat (local LLM) backend — FastAPI /chat proxy to Ollama (qwen2.5-coder:3b, optimized)
 After=network.target ollama.service rag-search.service
 Wants=ollama.service rag-search.service
 
@@ -8,6 +8,14 @@ Type=simple
 WorkingDirectory=/root/repos/webchat_with_local_llm/backend
 EnvironmentFile=/root/repos/webchat_with_local_llm/backend/.env
 Environment=RAG_URL=http://127.0.0.1:8100
+# Оптимизированный под задачу конфиг (см. eval/REPORT-optimization.md): code-tuned
+# модель + copy-first промпт + умеренные параметры. Меньше ложных абстейнов,
+# идеальные дословные цитаты (quotesDropped 0), быстрее и ниже давление на RAM.
+Environment=OLLAMA_MODEL=qwen2.5-coder:3b
+Environment=PROMPT_VARIANT=copyfirst
+Environment=RAG_K_AFTER=6
+Environment=OLLAMA_NUM_CTX=3072
+Environment=OLLAMA_NUM_PREDICT=384
 ExecStart=/root/repos/webchat_with_local_llm/backend/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8010
 Restart=always
 RestartSec=3
